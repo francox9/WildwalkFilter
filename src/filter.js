@@ -9,7 +9,8 @@ const
 const routes = toArray(container.querySelectorAll(".ww-grid")).map(box => {
   const [intro, info, _, difficulty] = box.querySelectorAll("p");
 
-  const area = box.querySelector("a").href.split("/")[4].replace(/\-/g, " ")
+  let area = box.querySelector("a").href.split("/")
+  area = area.length > 4 ? area[4].replace(/\-/g, " ") : ''
   _areas.add(area)
   _difficulties.add(difficulty.innerText)
   
@@ -42,15 +43,19 @@ const filter = ((_routes) => {
   const hide = elm => elm.style.display = 'none'  
   const resetElms = () => routes.forEach(r => setVisible(r.elm))
   const match = (filters, route) => {
-    return Object.keys(filters).every(key => console.log(key) || route[key].indexOf(filters[key]) >= 0)
+    return Object.keys(filters).every(key => route[key].indexOf(filters[key]) >= 0)
   }
 
   const routes = _routes
   let savedFilters = {}
   return (filters, reset = false) => {
-    reset && (resetElms(), savedFilters = {})
+    let count = 0
+    reset && (savedFilters = {})
     savedFilters = {...savedFilters, ...filters}
-    routes.forEach(r => !match(savedFilters, r) && hide(r.elm))
+
+    resetElms()
+    routes.forEach(r => match(savedFilters, r) ? count++ : hide(r.elm))
+    return count
   }
 })(routes)
 

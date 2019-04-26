@@ -1,21 +1,12 @@
 import { h, render } from 'preact';
-import _ from 'lodash'
-import Select from './components/Select.jsx'
-import TextInput from './components/Input.jsx'
-
-import filter, {areas} from './filter'
 import './style.scss'
+import App from './App.jsx'
 
-const debounceTime = 300
-const handle = (e) => {
-    filter(e, true)
-}
-const debouncedHandle = _.debounce(handle, debounceTime)
+const box = document.querySelector('.wt-boxes-container'),
+    container = document.createElement('div')
 
+box.insertBefore(container, box.firstChild)
 
 render((
-    <div id="foo">
-        <TextInput criteria="title" onUpdate={debouncedHandle}/>
-        <Select criteria="area" onUpdate={debouncedHandle} options={areas.map(a => ({value: a, text: a}))} multiple={true}/>
-    </div>
-), document.querySelector('.wt-boxes-container'));
+    <App/>
+), container);
