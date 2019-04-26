@@ -1,0 +1,61 @@
+import { toArray, infoExtract, transportMap } from "./utils";
+
+const container = document.querySelector(".wt-boxes-container");
+
+const 
+  _areas = new Set(), 
+  _difficulties = new Set()
+
+const routes = toArray(container.querySelectorAll(".ww-grid")).map(box => {
+  const [intro, info, _, difficulty] = box.querySelectorAll("p");
+
+  const area = box.querySelector("a").href.split("/")[4].replace(/\-/g, " ")
+  _areas.add(area)
+  _difficulties.add(difficulty.innerText)
+  
+  return {
+    title: box.querySelector(".ww-box-htag-title").innerText,
+    transport: toArray(box.querySelectorAll(".ww-info-box li img")).map(
+      op => transportMap[op.src] || op.src
+    ),
+    elm: box,
+    intro: intro.innerHTML,
+    info1: info.innerText,
+    info: infoExtract(info.innerText),
+    difficulty: difficulty.innerText,
+    area
+  };
+});
+
+
+
+/**
+ * Updates DOM
+ * @argument {Object} filters - key-value filter pairs
+ * @argument {boolean} reset - if reset options before 
+ * 
+ * @example
+ * filter({area: 'blue mountain'}, true)
+ */
+const filter = ((_routes) => {
+  const setVisible = elm => elm.style.display = 'block'
+  const hide = elm => elm.style.display = 'none'  
+  const resetElms = () => routes.forEach(r => setVisible(r.elm))
+  const match = (filters, route) => {
+    return Object.keys(filters).every(key => console.log(key) || route[key].indexOf(filters[key]) >= 0)
+  }
+
+  const routes = _routes
+  let savedFilters = {}
+  return (filters, reset = false) => {
+    reset && (resetElms(), savedFilters = {})
+    savedFilters = {...savedFilters, ...filters}
+    routes.forEach(r => !match(savedFilters, r) && hide(r.elm))
+  }
+})(routes)
+
+// window.filter = filter
+
+export default filter
+export const areas = Array.from(_areas)
+export const difficulties = Array.from(_difficulties)
