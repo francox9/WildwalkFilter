@@ -1,4 +1,4 @@
-import { toArray, infoExtract, transportMap } from "./utils";
+import { toArray, infoExtract, transportMap, arrToFn, isLongerOrEqual, isFurtherOrEqual } from "./utils";
 
 /**
  * Creates  a controlling filter instance from extracted routes' info
@@ -12,9 +12,34 @@ const createFilterFromRoutes = _routes => {
   const setVisible = elm => (elm.style.display = "block");
   const hide = elm => (elm.style.display = "none");
   const resetElms = () => routes.forEach(r => setVisible(r.elm));
+
+  /**
+   * Decide whether a route matches the filters
+   * 
+   * @example filters object
+   * {
+   *    title: {String}, // case insensitive
+   *    area: {String},
+   *    difficulty: {String},
+   *    type: {String},
+   *    transport: {String}, // Enum {Bus, Ferry, Train, Car}
+   *    time: {null | Array<Number>},
+   *    length: {null | Array<String>}
+   * }
+   * 
+   * @param {*} filters 
+   * @param {*} route 
+   */
   const match = (filters, route) => {
+    const usePrimitiveCompare = arrToFn(['title', 'area', 'difficulty', 'transport', 'type'])
     return Object.keys(filters).every(
-      key => route[key].indexOf(filters[key]) >= 0
+      key => {
+        switch (true) {
+          case usePrimitiveCompare(key): return route[key].indexOf(filters[key]) >= 0
+          case key === 'time': return !filters.time || (isLongerOrEqual(route.info, filters.time[0]) && isLongerOrEqual(filters.time[1], route.info))
+          case key === 'length': return !filters.length || (isFurtherOrEqual(route.info, filters.length[0]) && isFurtherOrEqual(filters.length[1], route.info))
+        }
+      } 
     );
   };
 
