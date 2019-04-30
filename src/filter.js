@@ -31,12 +31,16 @@ const createFilterFromRoutes = _routes => {
    * @param {*} route 
    */
   const match = (filters, route) => {
-    const usePrimitiveCompare = arrToFn(['title', 'area', 'difficulty', 'transport', 'type'])
+    const usePrimitiveCompare = arrToFn(['title', 'area', 'difficulty', 'type'])
     return Object.keys(filters).every(
       key => {
         switch (true) {
           case usePrimitiveCompare(key): return route[key].contains(filters[key], true)
+          case key === 'transport': {
+            return !filters[key] || route[key].indexOf(filters[key]) >= 0
+          }
           case key === 'time': {
+            debugger
             if (!filters.time) return true
             const [minTime, maxTime] = filters.time
             return isLongerOrEqual(route.info, minTime) &&
@@ -74,33 +78,57 @@ const createFilterFromRoutes = _routes => {
 export const createFilter = elm => {
   const container = elm;
 
-  const areas = new Set(), difficulties = new Set();
+  const areas = new Set(), difficulties = new Set(), types = new Set(), transports = new Set();
 
   const routes = toArray(container.querySelectorAll(".ww-grid")).map(box => {
-    const [intro, info, _, difficulty] = box.querySelectorAll("p");
+    const [intro, rawInfo, _, difficulty] = box.querySelectorAll("p");
 
+    /** Name of the route */
+    const title = box.querySelector(".ww-box-htag-title").innerText
+    /** Transport methods */
+    const transport = toArray(box.querySelectorAll(".ww-info-box li img")).map(
+      op => transportMap[op.src] || op.src
+    )
+    /** Information: length, time, type, */
+    const info = infoExtract(rawInfo.innerText)
+
+    /** Type of the route */
+    const type = info.type
+
+    /** Aggretation: areas, difficulties, types, times, transports */
     let area = box.querySelector("a").href.split("/");
     area = area.length > 4 ? area[4].replace(/\-/g, " ") : "Unknown";
     areas.add(area);
     difficulties.add(difficulty.innerText);
+    types.add(info.type)
+    transport.forEach(t => transports.add(t))
 
     return {
-      title: box.querySelector(".ww-box-htag-title").innerText,
-      transport: toArray(box.querySelectorAll(".ww-info-box li img")).map(
-        op => transportMap[op.src] || op.src
-      ),
+      title,
+      transport,
       elm: box,
       intro: intro.innerHTML,
-      info1: info.innerText,
-      info: infoExtract(info.innerText),
+      // info1: info.innerText,
+      info,
       difficulty: difficulty.innerText,
-      area
+      area,
+      type
     };
   })
+
+  const times = routes.map(r => ({
+    days: r.info.days,
+    hours: r.info.hours,
+    minutes: r.info.minutes
+  }))
 
   return {
     filter: createFilterFromRoutes(routes),
     areas: Array.from(areas),
-    difficulties: Array.from(difficulties)
+    difficulties: Array.from(difficulties),
+    types: Array.from(types),
+    transports: Array.from(transports),
+    routes,
+    times
   }
 }

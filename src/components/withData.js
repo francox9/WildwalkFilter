@@ -3,7 +3,6 @@ import { h, Component } from "preact";
 import {arrToFn} from '../utils'
 
 const debounceTime = 300;
-
 const opsProcess = (ops) => ops.map(a => ({value: a, text: a}))
 
 /**
@@ -13,21 +12,26 @@ const opsProcess = (ops) => ops.map(a => ({value: a, text: a}))
 const withData = filterInfo => WrappedComponent => {
   return class extends Component {
     constructor(props) {
-      super(props);
+        super(props);
+        this.state = {value: ''}
+
     }
     render() {
-        const {filter, areas, difficulties} = filterInfo
-        const {criteria} = this.props
-        const options = opsProcess(
-            criteria === 'area' ? areas :
-            criteria === 'difficulty' ? difficulties :
-            []
-        )
-        const debouncedHandle = _.debounce(e => {
-            console.log(filter(e, false));
+        const {filter} = filterInfo
+        const {criteria, options: ops} = this.props
+
+        const options = opsProcess( ops ? filterInfo[ops] : [] )
+        /**
+         * Handling onUpdate with a debounceTime
+         */
+        const handle = _.debounce(d => {
+            filter(d, false)
+            this.setState({value: d[criteria]})
+
+
         }, debounceTime);
 
-        return <WrappedComponent options={options} {...this.props} onUpdate={debouncedHandle} />;
+        return <WrappedComponent  {...this.props}  value={this.state.value} options={options} onUpdate={handle} />;
     }
   };
 };

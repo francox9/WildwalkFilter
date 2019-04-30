@@ -6,13 +6,9 @@ import { h, Component } from 'preact';
 class TextInput extends Component {
     constructor() {
         super()
-        this.state = {
-            value: ''
-        }
     }
     render() {
-        const {criteria} = this.props
-        const {value} = this.state
+        const {criteria, value} = this.props
         const onUpdate = (e) => {
             this.props.onUpdate({[criteria]: e.target.value})
         }

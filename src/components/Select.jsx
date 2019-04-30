@@ -9,21 +9,18 @@ import { h, Component } from 'preact';
 class Select extends Component {
     constructor() {
         super()
-        this.state = {
-            value: ''
-        }
     }
     render() {
-        const {multiple, criteria, options} = this.props
-        const {value} = this.state
+        const {multiple, criteria, options, value} = this.props
         const onUpdate = (e) => {
-            this.props.onUpdate({[criteria]: e.target.value})
+            this.props.onUpdate({[criteria]: [e.target.value]})
         }
         return (
             <label>
                 <span>{criteria}</span>
                 <br/>
                 <select value={value} multiple={multiple} onChange={onUpdate}>
+                    <option value="">Any</option>
                     {options.map(op => <option value={op.value}>{op.text}</option>)}
                 </select>
             </label>
