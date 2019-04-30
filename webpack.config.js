@@ -7,23 +7,9 @@ module.exports = {
     filename: "bundle.js"
   },
   watch: true,
-  mode: "production",
-  // mode: 'development',
+  // mode: "production",
+  mode: 'development',
   module: {
-    /*
-    {
-    test: /\.jsx?$/,
-    exclude: /node_modules/,
-    use: [
-      {
-        loader: 'babel-loader',
-        options: {
-          presets: ['react']
-        }
-      }
-    ],
-  }
-   */
     rules: [
       {
         test: /\.(js|jsx)$/,

@@ -1,5 +1,6 @@
-// import withData from "./withData";
 import { h, Component } from 'preact';
+// import withData from "./withData";
+
 /**
  *
  * @argument {Array<Object>} props.options

@@ -1,4 +1,5 @@
 import { h, Component } from 'preact';
+// import withData from './withData'
 /**
  * 
  */
@@ -25,8 +26,5 @@ class TextInput extends Component {
         )
     }
 }
-// const TextInput = props => {
-    
-// }
 
-export default TextInput
+export default (TextInput)

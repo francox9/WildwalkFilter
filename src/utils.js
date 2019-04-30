@@ -1,7 +1,8 @@
-export const toArray = iterable => Array.prototype.slice.call(iterable);
-String.prototype.contains = function(str) {
-  return this.indexOf(str) >= 0
+String.prototype.contains = function(str, regex = false) {
+  return regex ? (new RegExp(str, "i")).test(this) : (this.indexOf(str) >= 0)
 }
+
+export const toArray = iterable => Array.prototype.slice.call(iterable);
 
 const defaultInfo = {
   minutes: 0,

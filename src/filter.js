@@ -35,9 +35,19 @@ const createFilterFromRoutes = _routes => {
     return Object.keys(filters).every(
       key => {
         switch (true) {
-          case usePrimitiveCompare(key): return route[key].indexOf(filters[key]) >= 0
-          case key === 'time': return !filters.time || (isLongerOrEqual(route.info, filters.time[0]) && isLongerOrEqual(filters.time[1], route.info))
-          case key === 'length': return !filters.length || (isFurtherOrEqual(route.info, filters.length[0]) && isFurtherOrEqual(filters.length[1], route.info))
+          case usePrimitiveCompare(key): return route[key].contains(filters[key], true)
+          case key === 'time': {
+            if (!filters.time) return true
+            const [minTime, maxTime] = filters.time
+            return isLongerOrEqual(route.info, minTime) &&
+              isLongerOrEqual(maxTime, route.info) 
+          }
+          case key === 'length': {
+            if (!filters.length) return true
+            const [minL, maxL] = filters.length
+            return isFurtherOrEqual(route.info, minL) &&
+              isFurtherOrEqual(maxL, route.info) 
+          } 
         }
       } 
     );

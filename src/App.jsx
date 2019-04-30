@@ -1,47 +1,26 @@
 import { h, Component } from 'preact';
-// import {useState} from 'preact/hooks'
-import _ from 'lodash'
 import Select from './components/Select.jsx'
 import TextInput from './components/Input.jsx'
+import { createContext } from "preact-context";
 
 import './style.scss'
 
-const debounceTime = 300
 
 class App extends Component {
-    constructor() {
-        super()
-
-        this.debouncedHandle = _.debounce(this.handle, debounceTime).bind(this) // this.debouncedHandle.bind(this)
-        this.reset = this.reset.bind(this)
-
-        this.state = { updateIndex: 0 }
-    }
-
-    handle(e) {
-        const {filter} = this.props.filterInfo
-        console.log( filter(e, false) )
-    }
-    reset() { 
-        const {filter} = this.props.filterInfo
-
-        filter({}, true); 
-        this.setState(
-            (state) => ({'updateIndex': state.updateIndex + 1})
-        ) 
+    constructor(props) {
+        super(props)
+        this.Select = props.withData(Select)
+        this.TextInput = props.withData(TextInput)
     }
 
     render() { 
-        const {updateIndex} = this.state
-        const {areas, difficulties} = this.props.filterInfo
+        const {TextInput, Select} = this
 
         return (
             <div id="__filter_container">
-                <TextInput key={'title' + updateIndex} criteria="title" onUpdate={this.debouncedHandle}/>
-                <Select key={'area' + updateIndex}  criteria="area" onUpdate={this.debouncedHandle} options={areas.map(a => ({value: a, text: a}))} />
-                <Select key={'difficulty' + updateIndex}  criteria="difficulty" onUpdate={this.debouncedHandle} options={difficulties.map(a => ({value: a, text: a}))} />
-                
-                <button type="button" onClick={this.reset}>Reset</button>
+                <TextInput criteria="title" />
+                <Select criteria="area" />
+                <Select criteria="difficulty"  />                
             </div>
         )
     }
