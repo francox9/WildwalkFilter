@@ -20,5 +20,7 @@ export const infoExtract = infoStr => {
 
 export const transportMap = {
   "http://www.wildwalks.com/wildwalks_custom/icons/white_car.png": "Car",
-  "http://www.wildwalks.com/wildwalks_custom/icons/white_bus.png": "Bus"
+  "http://www.wildwalks.com/wildwalks_custom/icons/white_bus.png": "Bus",
+  "http://www.wildwalks.com/wildwalks_custom/icons/white_train.png": "Train",
+  "http://www.wildwalks.com/wildwalks_custom/icons/white_ferry.png": "Ferry"
 };
