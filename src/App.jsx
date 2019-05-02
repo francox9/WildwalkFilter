@@ -36,18 +36,17 @@ class App extends Component {
             <div>
                 <div id="__filter_container">
                     <TextInput title="Name" criteria="title" />
-
-                    <Select criteria="area" options={areas}/>
-                    <Select criteria="difficulty" options={difficulties} />
-
-                    <Select criteria="type" options={types} />
-                    <Select criteria="transport" options={transports} />
+                    <Select  title="Area" criteria="area" options={areas}/>
+                    <Select  title="Difficulty" criteria="difficulty" options={difficulties} />
+                    <Select  title="Type" criteria="type" options={types} />
+                    {/* <Select  title="Transport Methods" criteria="transport" options={transports} /> */}
 
                     {/* <Range criteria="time" options={times} /> */}
-                    {/* <Range criteria="length" options={lengths} /> */}
+                    <Range criteria="length" options={lengths} />
 
                 </div>
-                <p>{store.filteredAmount} routes Avilable</p>
+                <p> <span>{store.filteredAmount} routes Avilable</span>
+                <button type="button" onClick={()=>store.resetFilter()}>Show All</button></p>
             </div>
         )
     }
