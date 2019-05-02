@@ -6,7 +6,23 @@ String.prototype.contains = function(str, regex = false) {
 
 export const toArray = iterable => Array.prototype.slice.call(iterable);
 
-export const isLongerOrEqual = (a, b) => {
+
+export function Time(info) {
+  this.days = info.days
+  this.hours = info.hours
+  this.minutes = info.minutes
+}
+Time.prototype.toString = function() {
+  const {days, hours, minutes} = this
+  return (days && (days + 'days ')) + (hours && (hours + 'hours ')) + (minutes && (minutes + 'minutes '))
+}
+Time.prototype.valueOf = function() {
+  const {days, hours, minutes} = this
+  return (days && (days + 'days ')) + (hours && (hours + 'hours ')) + (minutes && (minutes + 'minutes '))
+}
+Time.prototype.isLongerOrEqual = (b) => {
+  const a = this
+
   if (a.days < b.days) return false
   else {
     if (a.days > b.days) return true
@@ -20,7 +36,6 @@ export const isLongerOrEqual = (a, b) => {
     }
   }
 }
-
 
 /**
  * Compare length

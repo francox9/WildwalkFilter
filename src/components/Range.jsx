@@ -13,13 +13,16 @@ class Range extends Component {
         super(props)
     }
     render({store}) {
-        const {criteria, options} = this.props
+        const {criteria, options, title} = this.props
         const value = store.criterias[criteria]
-        const minVal = value ? value[0] : '',
-            maxVal = value? value[1]: ''
 
-        const minCriteria = 'min ' + criteria, 
-            maxCriteria = 'max ' + criteria
+        const 
+            minVal = value ? value[0] : '',
+             maxVal = value? value[1]: '',
+            minCriteria = 'Min ' + criteria,  
+             maxCriteria = 'Max ' + criteria,
+            minTitle = "Min " + title, 
+             maxTitle = "Max " + title;
 
         const onUpdate = d => {
             let val
@@ -27,10 +30,8 @@ class Range extends Component {
                 store.updateFilter({
                     [criteria]: [val, maxVal]
                 })
-                // this.props.onUpdate({[criteria]: [val, maxValue]})
             }
             if (val = d[maxCriteria]) {
-                // this.props.onUpdate({[criteria]: [minValue, val]})
                 store.updateFilter({
                     [criteria]: [minVal, val]
                 })
@@ -39,8 +40,8 @@ class Range extends Component {
 
         return (
             <div>
-                <Select  {...this.props} title={minCriteria} criteria={minCriteria} value={minVal} onUpdate={ onUpdate }></Select>
-                <Select {...this.props} title={maxCriteria} criteria={maxCriteria}  value={maxVal} onUpdate={ onUpdate }></Select>
+                <Select  {...this.props} title={minTitle} criteria={minCriteria} value={minVal} onUpdate={ onUpdate }></Select>
+                <Select {...this.props} title={maxTitle} criteria={maxCriteria}  value={maxVal} onUpdate={ onUpdate }></Select>
             </div>
         )
     }

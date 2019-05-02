@@ -1,5 +1,5 @@
 
-import { toArray, infoExtract, transportMap, arrToFn, isLongerOrEqual, isFurtherOrEqual } from "./utils";
+import { toArray, infoExtract, transportMap, arrToFn, isLongerOrEqual, isFurtherOrEqual, Time } from "./utils";
 
 /**
  * Creates a controlling filter instance from a container box element
@@ -9,7 +9,8 @@ import { toArray, infoExtract, transportMap, arrToFn, isLongerOrEqual, isFurther
 export const createFilter = elm => {
   const container = elm;
 
-  const areas = new Set(), difficulties = new Set(), types = new Set(), transports = new Set(), lengths = new Set();
+  const areas = new Set(), difficulties = new Set(), types = new Set(), 
+    transports = new Set(), lengths = new Set(), times = []
 
   const routes = toArray(container.querySelectorAll(".ww-grid")).map(box => {
     const [intro, rawInfo, _, difficulty] = box.querySelectorAll("p");
@@ -26,6 +27,11 @@ export const createFilter = elm => {
     /** Type of the route */
     const type = info.type
 
+    /**
+     * Time of the route
+     */
+    const time = new Time(info)
+
     /** Aggretation: areas, difficulties, types, times, transports */
     let area = box.querySelector("a").href.split("/");
     area = area.length > 4 ? area[4].replace(/\-/g, " ") : "Unknown";
@@ -34,6 +40,7 @@ export const createFilter = elm => {
     types.add(info.type)
     transport.forEach(t => transports.add(t))
     lengths.add(info.length)
+    times.push(time)
 
     return {
       title,
@@ -41,17 +48,13 @@ export const createFilter = elm => {
       elm: box,
       intro: intro.innerHTML,
       info,
+      time,
       difficulty: difficulty.innerText,
       area,
       type
     };
   })
 
-  const times = routes.map(r => ({
-    days: r.info.days,
-    hours: r.info.hours,
-    minutes: r.info.minutes
-  }))
 
   const setVisible = elm => (elm.style.display = "block");
   const hide = elm => (elm.style.display = "none");

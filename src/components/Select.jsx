@@ -16,6 +16,7 @@ class Select extends Component {
     const { criteria, options, title, onUpdate: injectedOnUpdate } = this.props;
     const value = this.props.value || store.criterias[criteria];
 
+    console.log(window.ops = options)
     const onUpdate = injectedOnUpdate
       ? e => injectedOnUpdate({ [criteria]: e.target.value })
       : e => {
@@ -30,7 +31,7 @@ class Select extends Component {
         <select value={value} onChange={onUpdate}>
           <option value="">Any</option>
           {options.map(op => (
-            <option value={op}>{op}</option>
+            <option value={op}>{String(op)}</option>
           ))}
         </select>
       </label>
