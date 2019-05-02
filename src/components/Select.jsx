@@ -1,7 +1,6 @@
 import { h, Component } from 'preact';
 import { observer, inject } from 'mobx-preact';
 
-
 /**
  *
  * @argument {Array<Object>} props.options

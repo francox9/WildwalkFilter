@@ -1,13 +1,14 @@
-import { observer, Provider, inject, connect } from "mobx-preact";
-import { observable, action, autorun, computed } from "mobx";
+import { observable, autorun } from "mobx";
 import {debounce} from './utils'
 
 
 const match = (route, filters) => {
-    const {title, area, difficulty} = filters
+    const {title, area, difficulty, type, transport} = filters
     if (title && !(new RegExp(title, 'i') ).test(route.title) ) return false
     if (area && area != route.area) return false
     if (difficulty && difficulty != route.difficulty) return false
+    if (type && type != route.type) return false
+    if (transport && route.transport.indexOf(transport) < 0) return false
 
     return true
 }
@@ -29,20 +30,14 @@ const createStore = filterDOM => {
     },
     criterias: {
       title: "Blue"
-    }
+    },
+    filteredAmount: 0
   });
 
-
-// const debounced = (filterFn) => debounce(() => filterDOM(filterFn), 500)()
   autorun(s => {
+      console.log('~~~')
     const { filterFn } = store
-    // debounced(filterFn)
-    filterDOM(filterFn)
-
-    // console.log(
-    //   "in autorun",
-    //   debounce(() => filterDOM(filterFn), 500)
-    // );
+    store.filteredAmount = filterDOM(filterFn)
   });
 
   return store;

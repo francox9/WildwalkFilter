@@ -33,19 +33,21 @@ class App extends Component {
         const lengths = uniq(rawLengths)
 
         return (
-            <div id="__filter_container">
-                <TextInput title="Name" criteria="title" />
+            <div>
+                <div id="__filter_container">
+                    <TextInput title="Name" criteria="title" />
 
-                <Select criteria="area" options={areas}/>
-                <Select criteria="difficulty" options={difficulties} />
+                    <Select criteria="area" options={areas}/>
+                    <Select criteria="difficulty" options={difficulties} />
 
-                {/* <Select criteria="area" options={areas}/>
-                <Select criteria="difficulty" options={difficulties} />    
-                <Select criteria="type" options={types} />
-                <Select criteria="transport" options={transports} /> */}
+                    <Select criteria="type" options={types} />
+                    <Select criteria="transport" options={transports} />
 
-                {/* <Range criteria="time" options={times} /> */}
-                {/* <Range criteria="length" options={lengths} /> */}
+                    {/* <Range criteria="time" options={times} /> */}
+                    {/* <Range criteria="length" options={lengths} /> */}
+
+                </div>
+                <p>{store.filteredAmount} routes Avilable</p>
             </div>
         )
     }

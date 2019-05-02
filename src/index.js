@@ -4,9 +4,7 @@ import App from "./App.jsx";
 import { createFilter } from "./filter";
 // import withData from "./components/withData";
 import createStore from './store'
-
-import { observer, Provider, inject, connect } from "mobx-preact";
-import { observable, action, autorun, computed } from "mobx";
+import {  Provider } from "mobx-preact";
 
 document.querySelectorAll(".wt-boxes-container").forEach(box => {
   /**
