@@ -12,18 +12,23 @@ class Range extends Component {
     render() {
         const {criteria, value: [minValue, maxValue], options} = this.props
 
-        
+        const minCriteria = 'min ' + criteria, 
+            maxCriteria = 'max ' + criteria
 
-        const onUpdate = isMin => d => {
-            debugger
-            const val = d[criteria]
-            this.props.onUpdate({[criteria]: isMin ? [val, maxValue] : [minValue, val] })
+        const onUpdate = d => {
+            let val
+            if (val = d[minCriteria]) {
+                this.props.onUpdate({[criteria]: [val, maxValue]})
+            }
+            if (val = d[maxCriteria]) {
+                this.props.onUpdate({[criteria]: [minValue, val]})
+            }
         }
 
         return (
             <div>
-                <Select {...this.props} value={minValue} onUpdate={ onUpdate(true) }></Select>
-                <Select {...this.props} value={maxValue} onUpdate={ onUpdate(false) }></Select>
+                <Select {...this.props} criteria={minCriteria} value={minValue} onUpdate={ onUpdate }></Select>
+                <Select {...this.props} criteria={maxCriteria}  value={maxValue} onUpdate={ onUpdate }></Select>
             </div>
         )
     }

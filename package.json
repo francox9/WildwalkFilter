@@ -16,11 +16,15 @@
   "license": "ISC",
   "dependencies": {
     "lodash": "^4.17.11",
+    "mobx": "^5.9.4",
+    "mobx-preact": "^3.0.0",
     "preact": "^8.4.2",
-    "preact-context": "^1.1.3"
+    "preact-context": "^1.1.3",
+    "redux-zero": "^5.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
+    "@babel/plugin-proposal-decorators": "^7.4.4",
     "@babel/plugin-transform-react-jsx": "^7.3.0",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.5",

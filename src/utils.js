@@ -1,17 +1,11 @@
+export {uniqBy, uniq, debounce } from 'lodash'
+
 String.prototype.contains = function(str, regex = false) {
   return regex ? (new RegExp(str, "i")).test(this) : (this.indexOf(str) >= 0)
 }
 
 export const toArray = iterable => Array.prototype.slice.call(iterable);
 
-const defaultInfo = {
-  minutes: 0,
-  days: 0,
-  hours: 0,
-  length: "",
-  time: "",
-  type: "Return"
-};
 export const isLongerOrEqual = (a, b) => {
   if (a.days < b.days) return false
   else {
@@ -35,22 +29,35 @@ export const isLongerOrEqual = (a, b) => {
  * @param {*} a 
  * @param {*} b 
  */
-export const isFurtherOrEqual = (a, b) => {
-  // isFurtherOrEqual
-  const lengthA = a.length, lengthB = b.length
+export const isFurtherOrEqual = (lengthA, lengthB) => {
   return parseInt( lengthA ) * (lengthA.contains('k') ? 1000 : 1 ) >=
           parseInt( lengthB ) * (lengthB.contains('k') ? 1000 : 1 )
-
 }
 
+const defaultInfo = {
+  minutes: 0,
+  days: 0,
+  hours: 0,
+  length: "",
+  time: "",
+  type: "Return"
+};
+/**
+ * Extract time, length and type information from string on DOM
+ * @param {String} infoStr 
+ */
 export const infoExtract = infoStr => {
   const info = infoStr.match(
     /^(?<length>\d+(\.\d+)? k?m) (?<type>(Return)|(One way)|(Circuit))(\n|↵)(?<time>((?<days>\d+) Days?)?((?<hours>\d+) hrs?)?( )?((?<minutes>\d+) mins?)?)$/i
   );
-  return {
-    ...defaultInfo,
-    ...(info && info.groups)
-  };
+  return info ? {
+    minutes: info.groups.minutes || 0,
+    days: info.groups.days || 0,
+    hours:info.groups.hours || 0,
+    length: info.groups.length || "",
+    time: info.groups.time || "",
+    type: info.groups.type || "Return"
+  }: defaultInfo
 };
 
 export const transportMap = {

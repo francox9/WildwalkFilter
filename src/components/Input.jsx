@@ -1,21 +1,34 @@
 import { h, Component } from 'preact';
+import { observable, action } from 'mobx';
+import { observer, Provider, inject, connect } from 'mobx-preact';
+
 // import withData from './withData'
 /**
  * 
  */
+
+@inject('store')
+@observer
 class TextInput extends Component {
     constructor() {
         super()
     }
-    render() {
-        const {criteria, value} = this.props
+    render({store}) {
+        const {criteria, title} = this.props
+        const value = store.criterias[criteria]
+
+        // console.log(value)
         const onUpdate = (e) => {
-            this.props.onUpdate({[criteria]: e.target.value})
+            store.updateFilter({
+                [criteria]: e.target.value
+            })
+
+            // this.props.onUpdate({[criteria]: e.target.value})
         }
 
         return (
             <label>
-                <span>{criteria}</span>
+                <span>{store.count} {title}</span>
                 <br/>
                 <input type="text" value={value} onKeyUp={onUpdate}/>
             </label>

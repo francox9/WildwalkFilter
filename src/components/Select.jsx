@@ -1,19 +1,24 @@
 import { h, Component } from 'preact';
-// import withData from "./withData";
+import { observer, inject } from 'mobx-preact';
+
 
 /**
  *
  * @argument {Array<Object>} props.options
  * @argument {boolean} props.multiple
  */
+@inject('store')
+@observer
 class Select extends Component {
     constructor() {
         super()
     }
-    render() {
+    render({store}) {
         const {multiple, criteria, options, value} = this.props
         const onUpdate = (e) => {
-            this.props.onUpdate({[criteria]: [e.target.value]})
+            store.updateFilter({
+                [criteria]: e.target.value
+            })
         }
         return (
             <label>
@@ -21,7 +26,7 @@ class Select extends Component {
                 <br/>
                 <select value={value} multiple={multiple} onChange={onUpdate}>
                     <option value="">Any</option>
-                    {options.map(op => <option value={op.value}>{op.text}</option>)}
+                    {options.map(op => <option value={op}>{op}</option>)}
                 </select>
             </label>
         )

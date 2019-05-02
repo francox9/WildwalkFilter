@@ -1,15 +1,32 @@
 import { h, render } from "preact";
 import "./style.scss";
 import App from "./App.jsx";
-import {createFilter} from './filter'
-import withData from './components/withData'
+import { createFilter } from "./filter";
+// import withData from "./components/withData";
+import createStore from './store'
 
+import { observer, Provider, inject, connect } from "mobx-preact";
+import { observable, action, autorun, computed } from "mobx";
 
 document.querySelectorAll(".wt-boxes-container").forEach(box => {
-  const container = document.createElement("div")
-  const filterInfo = createFilter(box)
-
+  /**
+   * Insert the filter component to the top of the box container
+   */
+  const container = document.createElement("div");
   box.insertBefore(container, box.firstChild);
+  /**
+   * A filter controller created with info from DOM
+   */
+  const { filterDOM, data } = createFilter(box);
 
-  render(<App withData={withData(filterInfo)} />, container);
-})
+  // import {observable, autorun, action} from "mobx";
+  const store = createStore(filterDOM)
+
+  render(
+    <Provider store={store}>
+      <App data={data} />
+    </Provider>,
+
+    container
+  );
+});
