@@ -5,4 +5,4 @@ wildwalks.com is a great resource for bushwalking routes with its search functio
 But in many pages the resources are a bit disorganized.
 This extension is created primarily to help myself navigate.
 
-This line is for testing
+chrome web store link: https://chrome.google.com/webstore/detail/wildwalk-filter/pjkjkldkapbkfbklkolofcjlokkbekla
